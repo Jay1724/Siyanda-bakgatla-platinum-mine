@@ -8,7 +8,7 @@
    with a manual toggle persisted to localStorage).
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@700;800;900&family=Manrope:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@700;800;900&family=Inter:wght@700;800;900&family=Manrope:wght@500;600;700;800&family=Roboto:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
 
 :root{
   --bg:          #15130F;
@@ -31,7 +31,8 @@
 
   --display:       'Manrope', -apple-system, sans-serif;
   --display-heavy: 'Big Shoulders', 'Manrope', -apple-system, sans-serif;
-  --sans:          'IBM Plex Sans', -apple-system, sans-serif;
+  --hero-font:     'Inter', -apple-system, sans-serif;
+  --sans:          'Roboto', -apple-system, sans-serif;
   --mono:          'IBM Plex Mono', monospace;
 
   --edge: 1px solid var(--line);
@@ -300,8 +301,8 @@ html:not([data-theme="light"]) .theme-toggle .icon-moon{ opacity:0; transform:ro
 @media (max-width:860px){ .hero-grid{ grid-template-columns:1fr; } }
 .hero-eyebrow{ font-family:var(--mono); font-size:12.5px; color:var(--amber); margin-bottom:20px; }
 .hero h1{
-  font-family:var(--display-heavy); font-weight:800; text-transform:uppercase;
-  font-size:clamp(30px,4.6vw,52px); line-height:1; letter-spacing:-0.005em;
+  font-family:var(--hero-font); font-weight:800; text-transform:uppercase;
+  font-size:clamp(30px,4.6vw,52px); line-height:1; letter-spacing:-0.02em;
   color:var(--ink);
 }
 .hero .lede{ margin-top:22px; font-size:17px; color:var(--ink-soft); max-width:46ch; }
