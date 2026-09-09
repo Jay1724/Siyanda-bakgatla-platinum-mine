@@ -1,8 +1,11 @@
 /* ============================================================
    SIYANDA BAKGATLA PLATINUM MINE — design system
-   Concept: dark ore-yard industrial. Charcoal ground, amber
-   ore-glow accent, rounded pill controls, light card islands
-   for imagery/forms/data against the dark ground.
+   Concept: ore-yard industrial. Charcoal ground (dark, default)
+   or ivory ground (light), deep gold ore accent, rounded pill
+   controls, light card islands for imagery/forms/exec bios.
+   Theme is switched via [data-theme] on <html>, set by an early
+   inline script per page (browser prefers-color-scheme aware,
+   with a manual toggle persisted to localStorage).
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
@@ -18,9 +21,12 @@
   --ink-soft-on-light: #514E47;
   --line:        rgba(237,234,226,0.14);
   --line-on-light:     #C7C0B2;
-  --amber:       #E08A2E;
-  --amber-deep:  #B86A1D;
-  --amber-glow:  rgba(224,138,46,0.16);
+  --header-bg:   rgba(21,19,15,0.92);
+  --ph-pattern:  rgba(237,234,226,0.05);
+  --amber:       #C9971A;
+  --amber-deep:  #9C7412;
+  --amber-glow:  rgba(201,151,26,0.16);
+  --on-accent:   #15130F;
   --white:       #FFFFFF;
 
   --display: 'Manrope', -apple-system, sans-serif;
@@ -34,6 +40,17 @@
   --r-md: 16px;
   --r-sm: 10px;
   --r-pill: 999px;
+}
+
+:root[data-theme="light"]{
+  --bg:          #F4F1E8;
+  --bg-soft:     #FFFFFF;
+  --bg-softer:   #ECE7D8;
+  --ink:         #1C1B19;
+  --ink-soft:    rgba(28,27,25,0.62);
+  --line:        rgba(28,27,25,0.12);
+  --header-bg:   rgba(244,241,232,0.9);
+  --ph-pattern:  rgba(28,27,25,0.05);
 }
 
 *{ box-sizing:border-box; }
@@ -87,7 +104,7 @@ section:last-of-type{ border-bottom:none; }
 /* ---------- header / nav ---------- */
 .site-header{
   position:sticky; top:0; z-index:50;
-  background:rgba(21,19,15,0.92);
+  background:var(--header-bg);
   backdrop-filter:blur(8px);
   border-bottom:var(--edge);
 }
@@ -131,6 +148,21 @@ nav.primary > .nav-item.current > a{ background:var(--bg-soft); color:var(--ambe
 .dropdown a{ display:block; padding:10px 14px; font-size:14px; border-radius:var(--r-sm); color:var(--ink-soft); }
 .dropdown a:hover{ background:var(--amber-glow); color:var(--amber); }
 
+.header-actions{ display:flex; align-items:center; gap:10px; flex-shrink:0; }
+
+.theme-toggle{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:38px; height:38px; flex-shrink:0;
+  border-radius:var(--r-pill);
+  border:1px solid var(--line);
+  background:var(--bg-soft); color:var(--ink);
+  cursor:pointer; padding:0;
+}
+.theme-toggle:hover{ border-color:var(--amber); color:var(--amber); }
+.theme-toggle svg{ display:block; }
+html[data-theme="light"] .theme-toggle .icon-sun{ display:none; }
+html:not([data-theme="light"]) .theme-toggle .icon-moon{ display:none; }
+
 .nav-toggle{ display:none; }
 @media (max-width:960px){
   nav.primary{
@@ -173,7 +205,7 @@ nav.primary > .nav-item.current > a{ background:var(--bg-soft); color:var(--ambe
 /* generic placeholder image block */
 .ph{
   background:
-    repeating-linear-gradient(135deg, rgba(237,234,226,0.05) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(135deg, var(--ph-pattern) 0 1px, transparent 1px 14px),
     var(--bg-soft);
   border:var(--edge); border-radius:var(--r-lg);
   display:flex; align-items:center; justify-content:center;
@@ -188,7 +220,7 @@ nav.primary > .nav-item.current > a{ background:var(--bg-soft); color:var(--ambe
   font-family:var(--sans); font-weight:600; font-size:14.5px;
   border:1.5px solid var(--amber);
   border-radius:var(--r-pill);
-  background:var(--amber); color:#15130F;
+  background:var(--amber); color:var(--on-accent);
 }
 .btn:hover{ background:transparent; color:var(--amber); }
 .btn.outline{ background:transparent; color:var(--ink); border-color:var(--line); }
@@ -220,7 +252,7 @@ nav.primary > .nav-item.current > a{ background:var(--bg-soft); color:var(--ambe
 .element .el-name{ font-size:12.5px; color:var(--ink-soft); text-align:center; }
 
 /* ---------- people cards ---------- */
-.person{ background:var(--panel); border-radius:var(--r-lg); overflow:hidden; }
+.person{ background:var(--panel); border-radius:var(--r-lg); overflow:hidden; box-shadow:0 1px 0 rgba(0,0,0,0.06), 0 12px 28px rgba(0,0,0,0.16); }
 .person-photo{ aspect-ratio:3/3.4; border-radius:0; }
 .person-body{ padding:22px 24px 26px; }
 .person-role{ font-family:var(--mono); font-size:11.5px; color:var(--amber-deep); margin-bottom:6px; }
@@ -262,11 +294,11 @@ nav.primary > .nav-item.current > a{ background:var(--bg-soft); color:var(--ambe
 .project-row .p-tag{ font-size:14px; color:var(--ink-soft); }
 
 /* ---------- CTA band ---------- */
-.band{ background:linear-gradient(155deg,var(--bg-soft) 0%,#1a1610 100%); color:var(--ink); border-bottom:var(--edge); }
+.band{ background:linear-gradient(155deg,var(--bg-soft) 0%,var(--bg-softer) 100%); color:var(--ink); border-bottom:var(--edge); }
 .band h2{ color:var(--ink); }
 .band .lead-text{ color:var(--ink-soft); }
 .band .btn.outline{ color:var(--ink); border-color:var(--line); }
-.band .btn.outline:hover{ background:var(--amber); border-color:var(--amber); color:#15130F; }
+.band .btn.outline:hover{ background:var(--amber); border-color:var(--amber); color:var(--on-accent); }
 
 /* ---------- forms ---------- */
 .field{ margin-bottom:18px; }
@@ -296,7 +328,7 @@ footer.site-footer{ background:var(--bg-soft); color:var(--ink-soft); border-top
   font-size:12.5px; color:var(--ink-soft); flex-wrap:wrap; gap:12px;
 }
 .tipoff{
-  background:var(--amber); color:#15130F;
+  background:var(--amber); color:var(--on-accent);
   padding:24px 0;
 }
 .tipoff .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
@@ -319,7 +351,7 @@ footer.site-footer{ background:var(--bg-soft); color:var(--ink-soft); border-top
   border:1.5px solid var(--line); border-radius:var(--r-pill); padding:10px 20px; font-size:14px; font-weight:500;
   display:inline-flex; align-items:center; gap:8px; color:var(--ink);
 }
-.doc-list a:hover{ background:var(--amber); border-color:var(--amber); color:#15130F; }
+.doc-list a:hover{ background:var(--amber); border-color:var(--amber); color:var(--on-accent); }
 
 blockquote{
   font-family:var(--display); font-size:22px; font-weight:600;
