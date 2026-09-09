@@ -285,6 +285,9 @@ html:not([data-theme="light"]) .theme-toggle .icon-moon{ opacity:0; transform:ro
   padding:64px 0 44px 0;
   overflow:hidden;
 }
+@media (min-width:860px){
+  .hero{ padding:104px 0 84px 0; }
+}
 .hero::before{
   content:'';
   position:absolute; z-index:0;
@@ -294,6 +297,9 @@ html:not([data-theme="light"]) .theme-toggle .icon-moon{ opacity:0; transform:ro
   pointer-events:none;
 }
 .hero-copy{ position:relative; z-index:1; max-width:720px; padding-bottom:44px; }
+@media (min-width:860px){
+  .hero-copy{ padding-bottom:64px; }
+}
 .hero-eyebrow{ font-family:var(--mono); font-size:12.5px; color:var(--amber); margin-bottom:20px; }
 .hero h1{
   font-family:var(--hero-font); font-weight:800; text-transform:uppercase;
