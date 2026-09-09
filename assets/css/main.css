@@ -173,8 +173,6 @@ section:last-of-type{ border-bottom:none; }
   background:var(--header-bg);
   backdrop-filter:blur(8px);
   border-bottom:var(--edge);
-  border-top:3px solid;
-  border-image:repeating-linear-gradient(135deg, var(--amber) 0 10px, transparent 10px 20px) 3;
 }
 .site-header.is-scrolled{ box-shadow:0 12px 28px rgba(0,0,0,0.28); }
 :root[data-theme="light"] .site-header.is-scrolled{ box-shadow:0 12px 28px rgba(0,0,0,0.08); }
