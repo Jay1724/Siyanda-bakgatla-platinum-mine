@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact | Siyanda Bakgatla Platinum Mine</title>
+<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-bar">
+    <a href="index.html" class="brand">
+      <span class="brand-mark">SBPM</span>
+      <span>Siyanda Bakgatla<small>Platinum Mine</small></span>
+    </a>
+    <nav class="primary">
+      <div class="nav-item"><a href="index.html">Home</a></div>
+      <div class="nav-item">
+        <a href="about-us.html">About Us</a>
+        <div class="dropdown">
+          <a href="leadership.html">Leadership</a>
+          <a href="what-we-do.html">What We Do</a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="sustainability.html">Sustainability</a>
+        <div class="dropdown">
+          <a href="our-community.html">Our Community</a>
+          <a href="projects.html">Projects</a>
+          <a href="safety.html">Safety</a>
+          <a href="social-labour-plan.html">Social Labour Plan</a>
+          <a href="covid-19.html">Covid 19</a>
+        </div>
+      </div>
+      <div class="nav-item"><a href="news.html">News &amp; Insights</a></div>
+      <div class="nav-item"><a href="careers.html">Careers</a></div>
+      <div class="nav-item"><a href="tenders.html">Tenders</a></div>
+      <div class="nav-item NAV_CONTACT current"><a href="contact.html">Contact</a></div>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav">MENU</button>
+  </div>
+</header>
+<script>
+  document.getElementById('navToggle').addEventListener('click', function(){
+    var nav = document.querySelector('nav.primary');
+    var open = nav.classList.toggle('open');
+    this.setAttribute('aria-expanded', open);
+    this.textContent = open ? 'CLOSE' : 'MENU';
+  });
+</script>
+
+
+<div class="wrap crumb"><a href="index.html">Home</a> / Contact</div>
+
+<div class="page-head">
+  <div class="wrap">
+    <div class="section-mark">CONTACT US</div>
+    <h1>Get in touch</h1>
+    <p class="lede">Reach the mine, our Rosebank head office, or one of our specific departmental contacts below.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap split">
+    <div class="cell" style="padding:0;">
+      <table class="contact-table">
+        <tr><td colspan="2" style="padding-top:0; padding-bottom:18px; font-family:var(--serif); font-size:19px; font-weight:600; color:var(--ink); border-bottom:var(--edge);">Mine</td></tr>
+        <tr><td>Contact</td><td>Palesa Staat</td></tr>
+        <tr><td>Phone</td><td>+27 14 786 1119</td></tr>
+        <tr><td>Email</td><td><a href="mailto:palesa.staat@siyandaplatinum.com" style="border-bottom:1px solid var(--line);">palesa.staat@siyandaplatinum.com</a></td></tr>
+        <tr><td>Address</td><td>Blackwell Highway, Swartklip, Limpopo, 0370</td></tr>
+      </table>
+      <table class="contact-table" style="margin-top:28px;">
+        <tr><td colspan="2" style="padding-top:0; padding-bottom:18px; font-family:var(--serif); font-size:19px; font-weight:600; color:var(--ink); border-bottom:var(--edge);">Headquarters</td></tr>
+        <tr><td>Contact</td><td>Patience Nkolanyane</td></tr>
+        <tr><td>Phone</td><td>+27 11 832 2543</td></tr>
+        <tr><td>Email</td><td><a href="mailto:pnkolanyane@siyandaresources.co.za" style="border-bottom:1px solid var(--line);">pnkolanyane@siyandaresources.co.za</a></td></tr>
+        <tr><td>Address</td><td>3rd Floor, Oxford Corner, 32A Jellicoe Avenue, Rosebank, 2196</td></tr>
+      </table>
+    </div>
+    <div class="cell" style="padding:0;">
+      <table class="contact-table">
+        <tr><td colspan="2" style="padding-top:0; padding-bottom:18px; font-family:var(--serif); font-size:19px; font-weight:600; color:var(--ink); border-bottom:var(--edge);">Departmental Contacts</td></tr>
+        <tr><td>General Manager's Office</td><td>Connie Monosi<br>014 786 1422<br>connie.monosi@siyandaplatinum.com</td></tr>
+        <tr><td>Recruitment</td><td>Patience Mabobo<br>014 786 1471<br>patience.mabobo@siyandaplatinum.com</td></tr>
+        <tr><td>Procurement</td><td>Seleke Motimele<br>014 786 1334<br>seleke.motimele@siyandaplatinum.com</td></tr>
+        <tr><td>Social Responsibility</td><td>Gontse Sekudu<br>014 786 1105<br>gontsethalithah.sekudu@siyandaplatinum.co.za</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:none;">
+  <div class="wrap">
+    <div class="section-mark">SEND A MESSAGE</div>
+    <h2 class="kicker" style="max-width:30ch;">Have a general enquiry?</h2>
+    <form style="max-width:640px; margin-top:28px;">
+      <div class="grid-2" style="background:none; border:none; gap:20px;">
+        <div class="field" style="margin-bottom:0;"><label for="name">Name</label><input id="name" type="text" placeholder="Full name"></div>
+        <div class="field" style="margin-bottom:0;"><label for="email">Email</label><input id="email" type="email" placeholder="you@example.com"></div>
+      </div>
+      <div class="field" style="margin-top:20px;"><label for="subject">Subject</label><input id="subject" type="text" placeholder="What is this regarding?"></div>
+      <div class="field"><label for="message">Message</label><textarea id="message" rows="5" placeholder="Write your message"></textarea></div>
+      <button type="submit" class="btn">Send message</button>
+    </form>
+  </div>
+</section>
+
+<div class="tipoff">
+  <div class="wrap">
+    <div>
+      <strong>Whistleblowing is not a crime, keeping quiet is.</strong>
+      <div style="font-size:13.5px; margin-top:4px; opacity:0.9;">Anyone can call anonymously, 24 hours a day, 365 days a year.</div>
+    </div>
+    <div class="tip-num">0800 333 055</div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <div class="footer-brand">Siyanda Bakgatla</div>
+      <p class="footer-note">A PGM producing mine in Swartklip, Limpopo, extracting and processing Platinum Group Metals, Chromium, base metals and by-products from our reserve base.</p>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <a href="about-us.html">About Us</a>
+      <a href="leadership.html">Leadership</a>
+      <a href="what-we-do.html">What We Do</a>
+      <a href="news.html">News &amp; Insights</a>
+    </div>
+    <div>
+      <h4>Sustainability</h4>
+      <a href="our-community.html">Our Community</a>
+      <a href="projects.html">Projects</a>
+      <a href="safety.html">Safety</a>
+      <a href="social-labour-plan.html">Social Labour Plan</a>
+      <a href="covid-19.html">Covid 19</a>
+    </div>
+    <div>
+      <h4>Connect</h4>
+      <a href="careers.html">Careers</a>
+      <a href="tenders.html">Tenders</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="https://www.linkedin.com/search/results/all/?keywords=siyanda%20bakgatla%20platinum%20mine">LinkedIn</a>
+      <a href="https://www.facebook.com/profile.php?id=100069433014928">Facebook</a>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© Siyanda Bakgatla Platinum Mine (Pty) Ltd</span>
+    <span>Blackwell Highway, Swartklip, Limpopo, 0370</span>
+  </div>
+</footer>
+
+</body>
+</html>
