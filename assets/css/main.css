@@ -87,14 +87,17 @@ ul{ margin:0; padding:0; list-style:none; }
   *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
 }
 
-/* ---------- motion: theme fade, scroll reveal, hover lift ---------- */
-.reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+/* ---------- motion: theme fade, scroll reveal, hover lift ----------
+   Entrances use ease-out (instant response, settles in); hover/color
+   changes use ease; nothing here exceeds ~450ms. See
+   .claude/skills/frontend-design/web-animation-design.md */
+.reveal{ opacity:0; transform:translateY(18px); transition:opacity .45s ease-out, transform .45s ease-out; }
 .reveal.is-visible{ opacity:1; transform:none; }
 
 /* staggered cascade for grid children once their section has revealed */
 .reveal .grid-4 > *, .reveal .grid-3 > *, .reveal .grid-2 > *, .reveal .elements > *{
   opacity:0; transform:translateY(14px);
-  transition:opacity .5s ease, transform .5s ease;
+  transition:opacity .4s ease-out, transform .4s ease-out;
 }
 .reveal.is-visible .grid-4 > *, .reveal.is-visible .grid-3 > *,
 .reveal.is-visible .grid-2 > *, .reveal.is-visible .elements > *{
@@ -116,21 +119,26 @@ ul{ margin:0; padding:0; list-style:none; }
   transition:background-color .35s ease, color .35s ease, border-color .35s ease, box-shadow .3s ease;
 }
 
-.btn{ transition:background-color .25s ease, color .25s ease, border-color .25s ease, transform .15s ease; }
-.btn:hover{ transform:translateY(-2px); }
-.btn:active{ transform:translateY(0); }
+.btn{ transition:background-color .25s ease, color .25s ease, border-color .25s ease, transform .15s ease; will-change:transform; }
+.btn:active{ transform:scale(0.97); }
 
-.cell, .element{ transition:background-color .35s ease, border-color .25s ease, transform .25s ease, box-shadow .25s ease; }
-.cell:hover, .element:hover{ transform:translateY(-4px); border-color:var(--amber); }
+.cell, .element{ transition:background-color .35s ease, border-color .25s ease, transform .25s ease, box-shadow .25s ease; will-change:transform; }
 
-.person{ transition:transform .25s ease, box-shadow .25s ease; }
-.person:hover{ transform:translateY(-4px); box-shadow:0 1px 0 rgba(0,0,0,0.06), 0 20px 40px rgba(0,0,0,0.22); }
+.person{ transition:transform .25s ease, box-shadow .25s ease; will-change:transform; }
 
 .doc-list a{ transition:background-color .25s ease, border-color .25s ease, color .25s ease, transform .15s ease; }
-.doc-list a:hover{ transform:translateY(-2px); }
 
 nav.primary > .nav-item > a, .dropdown a{ transition:background-color .2s ease, color .2s ease; }
 .theme-toggle{ transition:border-color .2s ease, color .2s ease; }
+
+/* Hover-only lift/color effects — gated so a tap on touch devices
+   can't leave an element stuck in its hover state. */
+@media (hover:hover) and (pointer:fine){
+  .btn:hover{ transform:translateY(-2px); }
+  .cell:hover, .element:hover{ transform:translateY(-4px); border-color:var(--amber); }
+  .person:hover{ transform:translateY(-4px); box-shadow:0 1px 0 rgba(0,0,0,0.06), 0 20px 40px rgba(0,0,0,0.22); }
+  .doc-list a:hover{ transform:translateY(-2px); }
+}
 
 /* ---------- layout helpers ---------- */
 .wrap{ max-width:var(--max); margin:0 auto; padding:0 32px; }
@@ -199,14 +207,17 @@ nav.primary > .nav-item > a:hover,
 nav.primary > .nav-item.current > a{ background:var(--bg-soft); color:var(--amber); }
 
 .nav-item .dropdown{
-  display:none;
   position:absolute; top:100%; left:0;
   background:var(--bg-soft); border:var(--edge);
   border-radius:var(--r-md);
   min-width:190px; padding:6px;
   box-shadow:0 16px 40px rgba(0,0,0,0.4);
+  opacity:0; visibility:hidden; pointer-events:none;
+  transform:scale(0.95) translateY(-4px);
+  transform-origin:top left;
+  transition:opacity .18s ease-out, transform .18s ease-out, visibility .18s;
 }
-.nav-item:hover .dropdown{ display:block; }
+.nav-item:hover .dropdown{ opacity:1; visibility:visible; pointer-events:auto; transform:none; }
 .dropdown a{ display:block; padding:10px 14px; font-size:14px; border-radius:var(--r-sm); color:var(--ink-soft); }
 .dropdown a:hover{ background:var(--amber-glow); color:var(--amber); }
 
@@ -214,6 +225,7 @@ nav.primary > .nav-item.current > a{ background:var(--bg-soft); color:var(--ambe
 
 .theme-toggle{
   display:inline-flex; align-items:center; justify-content:center;
+  position:relative;
   width:38px; height:38px; flex-shrink:0;
   border-radius:var(--r-pill);
   border:1px solid var(--line);
@@ -221,9 +233,13 @@ nav.primary > .nav-item.current > a{ background:var(--bg-soft); color:var(--ambe
   cursor:pointer; padding:0;
 }
 .theme-toggle:hover{ border-color:var(--amber); color:var(--amber); }
-.theme-toggle svg{ display:block; }
-html[data-theme="light"] .theme-toggle .icon-sun{ display:none; }
-html:not([data-theme="light"]) .theme-toggle .icon-moon{ display:none; }
+.theme-toggle svg{
+  position:absolute; top:50%; left:50%;
+  margin:-9px 0 0 -9px;
+  transition:opacity .25s ease-out, transform .25s ease-out;
+}
+html[data-theme="light"] .theme-toggle .icon-sun{ opacity:0; transform:rotate(-40deg) scale(0.7); }
+html:not([data-theme="light"]) .theme-toggle .icon-moon{ opacity:0; transform:rotate(40deg) scale(0.7); }
 
 .nav-toggle{ display:none; }
 @media (max-width:960px){
@@ -236,7 +252,8 @@ html:not([data-theme="light"]) .theme-toggle .icon-moon{ display:none; }
   nav.primary.open{ display:flex; }
   nav.primary > .nav-item > a{ padding:14px 12px; border-radius:var(--r-sm); }
   .nav-item .dropdown{
-    display:block; position:static; border:none; box-shadow:none; background:none; padding:0 0 0 12px;
+    position:static; border:none; box-shadow:none; background:none; padding:0 0 0 12px;
+    opacity:1; visibility:visible; pointer-events:auto; transform:none; transition:none;
   }
   .nav-item .dropdown a{ padding:10px 12px; }
   .site-header{ position:sticky; }
