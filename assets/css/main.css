@@ -592,3 +592,16 @@ footer.site-footer::after{
 @keyframes hero-push{ from{ transform:scale(1); } to{ transform:scale(1.07); } }
 .hero{ overflow:hidden; }
 .hero-figure{ animation:hero-push 28s ease-out forwards; transform-origin:60% 40%; }
+
+/* ---------- commodity price strip (homepage) ---------- */
+.price-strip{ background:var(--bg); border-bottom:var(--edge); }
+.price-inner{ display:flex; align-items:center; gap:36px; padding-top:14px; padding-bottom:14px; overflow-x:auto; scrollbar-width:none; }
+.price-inner::-webkit-scrollbar{ display:none; }
+.price-label{ font-family:var(--mono); font-size:12px; color:var(--amber); white-space:nowrap; display:flex; flex-direction:column; line-height:1.3; }
+.price-label span{ color:var(--ink-soft); font-size:11px; }
+.price{ display:flex; align-items:baseline; gap:10px; white-space:nowrap; }
+.price-code{ font-family:var(--display-heavy); font-weight:800; font-size:20px; color:var(--amber); }
+.price-name{ font-size:13px; color:var(--ink-soft); }
+.price-val{ font-family:var(--mono); font-size:15px; font-weight:500; color:var(--ink); font-variant-numeric:tabular-nums; }
+.price-time{ margin-left:auto; font-family:var(--mono); font-size:11px; color:var(--ink-soft); white-space:nowrap; }
+@media (max-width:700px){ .price-inner{ gap:24px; } .price-name{ display:none; } }
