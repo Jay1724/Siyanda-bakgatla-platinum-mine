@@ -513,3 +513,82 @@ blockquote{
 table.contact-table{ width:100%; border-collapse:collapse; }
 table.contact-table td{ padding:14px 0; border-bottom:var(--edge); vertical-align:top; font-size:14.5px; color:var(--ink); }
 table.contact-table td:first-child{ color:var(--ink-soft); width:42%; }
+
+/* ============================================================
+   DESIGN PASS — signature details
+   Additive layer on the ore-yard system above. Ideas borrowed
+   from the mine itself: reef strata, ore-grade numerals, a
+   survey-peg mark. Motion is entrance-only, ease-out, and is
+   switched off by the reduced-motion rule at the top.
+   ============================================================ */
+
+/* amber selection + keyboard focus, everywhere */
+::selection{ background:var(--amber); color:var(--on-accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible,
+.field input:focus-visible, .field textarea:focus-visible, .field select:focus-visible{
+  outline:2px solid var(--amber); outline-offset:3px; border-radius:var(--r-sm);
+}
+
+/* section mark: the dash grows like a survey line being pulled out */
+.section-mark::before{ width:22px; transition:width .6s ease-out .15s; }
+.reveal:not(.is-visible) .section-mark::before{ width:0; }
+.reveal.is-visible .section-mark::before{ width:36px; }
+
+/* value cards: oversized outlined numerals that fill with ore on hover */
+.cell{ position:relative; overflow:hidden; }
+.cell .num{
+  font-family:var(--display-heavy); font-weight:800;
+  font-size:64px; line-height:0.9; letter-spacing:0.01em;
+  color:transparent; -webkit-text-stroke:1.5px var(--amber);
+  margin-bottom:18px;
+  transition:color .3s ease-out;
+}
+.cell::after{
+  content:''; position:absolute; left:0; bottom:0; height:3px; width:100%;
+  background:var(--amber); transform:scaleX(0); transform-origin:left;
+  transition:transform .35s ease-out;
+}
+@media (hover:hover) and (pointer:fine){
+  .cell:hover .num{ color:var(--amber); }
+  .cell:hover::after{ transform:scaleX(1); }
+}
+
+/* stat strip: a gold peg-mark above each figure, drawn in on reveal */
+.stat{ position:relative; }
+.stat::before{
+  content:''; position:absolute; top:0; left:24px; height:3px; width:28px;
+  background:var(--amber); transform-origin:left;
+  transition:transform .5s ease-out .2s;
+}
+.reveal:not(.is-visible) .stat::before{ transform:scaleX(0); }
+.stat .val{ font-variant-numeric:tabular-nums; font-size:clamp(36px,4.4vw,52px); }
+
+/* CTA band: reef strata — thin angled seams at uneven spacing */
+.band{ position:relative; overflow:hidden; isolation:isolate; }
+.band::before{
+  content:''; position:absolute; inset:-20% -10%; z-index:-1; pointer-events:none;
+  background:
+    repeating-linear-gradient(-14deg,
+      transparent 0 46px, rgba(201,151,26,0.10) 46px 47px,
+      transparent 47px 118px, rgba(201,151,26,0.06) 118px 119px,
+      transparent 119px 171px, rgba(201,151,26,0.12) 171px 172px);
+  -webkit-mask-image:linear-gradient(100deg, transparent 5%, #000 55%);
+          mask-image:linear-gradient(100deg, transparent 5%, #000 55%);
+}
+
+/* footer: the mine's name, large and outlined, as the last thing you see */
+footer.site-footer{ position:relative; overflow:hidden; }
+footer.site-footer::after{
+  content:'SIYANDA' / '';
+  display:block; text-align:center; pointer-events:none; user-select:none;
+  font-family:var(--display-heavy); font-weight:900;
+  font-size:clamp(88px,19vw,260px); line-height:0.78;
+  letter-spacing:0.02em; color:transparent;
+  -webkit-text-stroke:1px var(--line);
+  margin-top:24px; transform:translateY(8%);
+}
+
+/* hero photo: slow push-in so a still image feels alive (transform only) */
+@keyframes hero-push{ from{ transform:scale(1); } to{ transform:scale(1.07); } }
+.hero{ overflow:hidden; }
+.hero-figure{ animation:hero-push 28s ease-out forwards; transform-origin:60% 40%; }
