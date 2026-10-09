@@ -14,6 +14,7 @@
 })();
 </script>
 <link rel="stylesheet" href="assets/css/main.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 
@@ -99,8 +100,9 @@
 </div>
 
 <section style="border-bottom:none;">
-  <div class="wrap">
-    <p class="lead-text" style="color:var(--ink-soft); font-style:italic;">No open tenders are currently listed. Check back for procurement opportunities, or contact our Procurement Office directly.</p>
+  <div class="wrap" id="tendersWrap">
+    <p class="lead-text" id="tendersEmpty" style="color:var(--ink-soft); font-style:italic;">No open tenders are currently listed. Check back for procurement opportunities, or contact our Procurement Office directly.</p>
+    <div id="tendersList"></div>
     <table class="contact-table" style="max-width:520px; margin-top:28px;">
       <tr><td>Procurement Office</td><td>Seleke Motimele</td></tr>
       <tr><td>Phone</td><td>014 786 1334</td></tr>
@@ -154,6 +156,42 @@
     <span>Blackwell Highway, Swartklip, Limpopo, 0370</span>
   </div>
 </footer>
+
+<script>
+const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
+const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+async function loadTenders(){
+  const configured = !SUPABASE_URL.includes('YOUR_') && !SUPABASE_KEY.includes('YOUR_');
+  if(!configured || !window.supabase) return;
+  try{
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const { data, error } = await sb.from('tenders').select('*').eq('status', 'published').order('closing_date', { ascending:true });
+    if(error) throw error;
+    if(!data || !data.length) return;
+    document.getElementById('tendersEmpty').style.display = 'none';
+    document.getElementById('tendersList').innerHTML = data.map(item => `
+      <div class="project-row">
+        <div>
+          <div class="p-name">${escapeHtml(item.title)}</div>
+          ${item.closing_date ? `<div class="p-tag" style="margin-top:4px; font-family:var(--mono); font-size:12px;">Closes ${escapeHtml(item.closing_date)}</div>` : ''}
+        </div>
+        <div>
+          <p class="p-tag">${escapeHtml(item.summary || '')}</p>
+          ${item.body ? `<p class="lead-text" style="margin-top:10px;">${escapeHtml(item.body)}</p>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }catch(e){
+    console.error(e);
+  }
+}
+loadTenders();
+</script>
 
 <script src="assets/js/site.js"></script>
 </body>
