@@ -14,6 +14,7 @@
 })();
 </script>
 <link rel="stylesheet" href="assets/css/main.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 
@@ -99,7 +100,7 @@
 </div>
 
 <section style="border-bottom:none;">
-  <div class="wrap">
+  <div class="wrap" id="projectsList">
     <div class="project-row"><div class="p-name">Okomelang Primary School</div><div class="p-tag">Infrastructure upgrades</div></div><div class="project-row"><div class="p-name">Dinkwe Primary School</div><div class="p-tag">Infrastructure upgrades</div></div><div class="project-row"><div class="p-name">Mokgalwana Primary School</div><div class="p-tag">Infrastructure upgrades</div></div><div class="project-row"><div class="p-name">Nkobong Secondary</div><div class="p-tag">Infrastructure upgrades</div></div><div class="project-row"><div class="p-name">Makuka Secondary</div><div class="p-tag">Infrastructure upgrades</div></div><div class="project-row"><div class="p-name">Sedibelo Primary</div><div class="p-tag">Infrastructure upgrades</div></div><div class="project-row"><div class="p-name">Modderkuil Clinic</div><div class="p-tag">Infrastructure upgrades</div></div><div class="project-row"><div class="p-name">Kraalhoek Clinic</div><div class="p-tag">Infrastructure upgrades</div></div><div class="project-row"><div class="p-name">Winter School and Hospitality Learners</div><div class="p-tag">SLP focus area</div></div><div class="project-row"><div class="p-name">Fleet Handover Event</div><div class="p-tag">Fleet</div></div>
   </div>
 </section>
@@ -149,6 +150,39 @@
     <span>Blackwell Highway, Swartklip, Limpopo, 0370</span>
   </div>
 </footer>
+
+<script>
+const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
+const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+async function loadProjects(){
+  const el = document.getElementById('projectsList');
+  const configured = !SUPABASE_URL.includes('YOUR_') && !SUPABASE_KEY.includes('YOUR_');
+  if(!configured || !window.supabase) return; // keep the page's built-in project list as a fallback
+  try{
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const { data, error } = await sb.from('projects').select('*').eq('status', 'published').order('updated_at', { ascending:false });
+    if(error) throw error;
+    if(!data || !data.length) return; // nothing published yet — keep fallback list showing
+    el.innerHTML = data.map(item => `
+      <div class="project-row">
+        <div class="p-name">${escapeHtml(item.title)}</div>
+        <div>
+          <div class="p-tag">${escapeHtml(item.tag || item.summary || '')}</div>
+          ${item.body ? `<p class="lead-text" style="margin-top:10px;">${escapeHtml(item.body)}</p>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }catch(e){
+    console.error(e); // leave fallback list in place on any failure
+  }
+}
+loadProjects();
+</script>
 
 <script src="assets/js/site.js"></script>
 </body>

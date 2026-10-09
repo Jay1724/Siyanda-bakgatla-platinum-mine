@@ -14,6 +14,7 @@
 })();
 </script>
 <link rel="stylesheet" href="assets/css/main.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 
@@ -130,6 +131,14 @@
   </div>
 </section>
 
+<section id="vacanciesSection" style="display:none;">
+  <div class="wrap">
+    <div class="section-mark">CURRENT VACANCIES</div>
+    <h2 class="kicker" style="max-width:30ch;">Open roles at SBPM</h2>
+  </div>
+  <div class="wrap" id="careersList" style="margin-top:32px;"></div>
+</section>
+
 <section class="band" style="border-bottom:none;">
   <div class="wrap" style="text-align:left;">
     <div class="section-mark" style="color:#C9B98A;">VACANCIES</div>
@@ -186,6 +195,43 @@
     <span>Blackwell Highway, Swartklip, Limpopo, 0370</span>
   </div>
 </footer>
+
+<script>
+const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
+const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+async function loadCareers(){
+  const configured = !SUPABASE_URL.includes('YOUR_') && !SUPABASE_KEY.includes('YOUR_');
+  if(!configured || !window.supabase) return;
+  try{
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const { data, error } = await sb.from('careers').select('*').eq('status', 'published').order('closing_date', { ascending:true });
+    if(error) throw error;
+    if(!data || !data.length) return;
+    document.getElementById('careersList').innerHTML = data.map(item => `
+      <div class="project-row">
+        <div>
+          <div class="p-name">${escapeHtml(item.title)}</div>
+          <div class="p-tag" style="margin-top:4px; font-family:var(--mono); font-size:12px;">${item.location ? escapeHtml(item.location) : ''}${item.location && item.closing_date ? ' — ' : ''}${item.closing_date ? 'Closes ' + escapeHtml(item.closing_date) : ''}</div>
+        </div>
+        <div>
+          <p class="p-tag">${escapeHtml(item.summary || '')}</p>
+          ${item.body ? `<p class="lead-text" style="margin-top:10px;">${escapeHtml(item.body)}</p>` : ''}
+        </div>
+      </div>
+    `).join('');
+    const section = document.getElementById('vacanciesSection');
+    section.style.display = '';
+  }catch(e){
+    console.error(e);
+  }
+}
+loadCareers();
+</script>
 
 <script src="assets/js/site.js"></script>
 </body>

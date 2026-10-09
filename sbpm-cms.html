@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SBPM Content Manager</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
+
+:root{
+  --ground:      #EDEAE2;
+  --panel:       #FAF9F6;
+  --ink:         #1C1B19;
+  --ink-soft:    #514E47;
+  --line:        #C7C0B2;
+  --bronze:      #8A6D3B;
+  --bronze-deep: #6B5127;
+  --green:       #3F5A4D;
+  --green-deep:  #2C4038;
+  --red:         #A3392E;
+  --red-bg:      #F5E6E3;
+  --amber:       #8A6D1B;
+  --amber-bg:    #F5EFDD;
+  --white:       #FFFFFF;
+  --serif: 'Fraunces', Georgia, serif;
+  --sans:  'IBM Plex Sans', -apple-system, sans-serif;
+  --mono:  'IBM Plex Mono', monospace;
+}
+*{ box-sizing:border-box; }
+body{ margin:0; font-family:var(--sans); background:var(--ground); color:var(--ink); }
+#app{ min-height:100vh; }
+h1,h2,h3{ font-family:var(--serif); font-weight:600; margin:0; letter-spacing:-0.01em; }
+button{ font-family:var(--sans); cursor:pointer; }
+input, textarea, select{ font-family:var(--sans); }
+::placeholder{ color:#9A9587; }
+
+.setup-wrap{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+.setup-card{ background:var(--panel); border:1px solid var(--line); max-width:480px; padding:32px; }
+.setup-card h1{ font-size:20px; margin-bottom:12px; }
+.setup-card p{ font-size:14px; color:var(--ink-soft); line-height:1.6; margin-bottom:12px; }
+.setup-card code{ background:var(--ground); padding:2px 6px; font-family:var(--mono); font-size:12.5px; }
+
+.login-wrap{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+.login-card{ background:var(--panel); border:1px solid var(--line); width:100%; max-width:380px; padding:36px 32px; }
+.login-mark{ width:44px; height:44px; border:1.5px solid var(--ink); display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:12px; margin-bottom:20px; }
+.login-card h1{ font-size:22px; margin-bottom:6px; }
+.login-sub{ font-size:13.5px; color:var(--ink-soft); margin-bottom:28px; }
+.field{ margin-bottom:16px; }
+.field label{ display:block; font-size:12.5px; font-weight:500; margin-bottom:6px; color:var(--ink-soft); }
+.field input, .field textarea, .field select{
+  width:100%; padding:11px 13px; font-size:14.5px;
+  background:var(--white); border:1px solid var(--line); color:var(--ink);
+}
+.field input:focus, .field textarea:focus, .field select:focus{ outline:2px solid var(--bronze); outline-offset:1px; }
+.field textarea{ resize:vertical; min-height:110px; line-height:1.5; }
+.role-toggle{ display:flex; gap:8px; margin-bottom:20px; }
+.role-btn{ flex:1; padding:10px; border:1px solid var(--line); background:var(--white); font-size:13px; font-weight:500; color:var(--ink-soft); text-align:center; }
+.role-btn.active{ border-color:var(--ink); background:var(--ink); color:var(--ground); }
+.btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 20px; font-weight:500; font-size:14px; border:1.5px solid var(--ink); background:var(--ink); color:var(--ground); width:100%; }
+.btn:hover{ background:var(--ground); color:var(--ink); }
+.btn.outline{ background:transparent; color:var(--ink); }
+.btn.outline:hover{ background:var(--ink); color:var(--ground); }
+.btn.danger{ border-color:var(--red); background:var(--red); color:#fff; }
+.btn.danger:hover{ background:transparent; color:var(--red); }
+.btn.small{ padding:7px 14px; font-size:12.5px; width:auto; }
+.btn:disabled{ opacity:0.4; cursor:not-allowed; }
+.login-err{ font-size:13px; color:var(--red); margin-top:-8px; margin-bottom:16px; }
+
+.shell{ display:flex; min-height:100vh; }
+.sidebar{ width:220px; flex-shrink:0; background:var(--ink); color:#D8D5CC; padding:24px 0; display:flex; flex-direction:column; }
+.sb-brand{ padding:0 20px 24px; border-bottom:1px solid #38352F; margin-bottom:12px; }
+.sb-brand strong{ display:block; font-family:var(--serif); font-size:17px; color:var(--panel); }
+.sb-brand span{ display:block; font-size:11.5px; color:#948F82; margin-top:2px; }
+.sb-nav{ flex:1; }
+.sb-item{ display:flex; align-items:center; gap:10px; padding:11px 20px; font-size:14px; color:#B7B3A8; border-left:2px solid transparent; }
+.sb-item.active{ color:var(--panel); background:rgba(255,255,255,0.04); border-left-color:var(--bronze); }
+.sb-item:hover{ color:var(--panel); cursor:pointer; }
+.sb-count{ margin-left:auto; font-family:var(--mono); font-size:11px; color:#948F82; background:rgba(255,255,255,0.06); padding:1px 7px; }
+.sb-foot{ padding:16px 20px 0; border-top:1px solid #38352F; margin-top:12px; }
+.sb-role{ font-family:var(--mono); font-size:11px; color:#948F82; margin-bottom:10px; }
+.sb-role b{ color:var(--panel); }
+.sb-logout{ font-size:13px; color:#B7B3A8; background:none; border:none; padding:0; }
+.sb-logout:hover{ color:var(--panel); text-decoration:underline; }
+
+.main{ flex:1; min-width:0; padding:36px 44px; }
+.main-head{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:28px; flex-wrap:wrap; gap:16px; }
+.main-head h2{ font-size:24px; }
+.main-head p{ font-size:13.5px; color:var(--ink-soft); margin-top:6px; max-width:52ch; }
+
+.item-row{ background:var(--panel); border:1px solid var(--line); padding:16px 20px; margin-bottom:10px; display:flex; align-items:center; gap:16px; }
+.item-main{ flex:1; min-width:0; }
+.item-title{ font-family:var(--serif); font-weight:600; font-size:16px; margin-bottom:4px; }
+.item-meta{ font-size:12.5px; color:var(--ink-soft); display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.badge{ font-family:var(--mono); font-size:10.5px; padding:2px 8px; text-transform:uppercase; letter-spacing:0.03em; }
+.badge.published{ background:#E4EEE7; color:var(--green-deep); }
+.badge.draft{ background:var(--amber-bg); color:var(--amber); }
+.item-actions{ display:flex; gap:8px; flex-shrink:0; }
+.empty{ border:1px dashed var(--line); padding:40px 24px; text-align:center; color:var(--ink-soft); font-size:14px; }
+
+.editor{ background:var(--panel); border:1px solid var(--line); padding:28px 32px; max-width:680px; }
+.editor h3{ font-size:19px; margin-bottom:22px; }
+.editor-grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.editor-actions{ display:flex; gap:10px; margin-top:24px; padding-top:20px; border-top:1px solid var(--line); }
+.editor-actions .btn{ width:auto; padding:11px 22px; }
+.back-link{ font-family:var(--mono); font-size:12px; color:var(--ink-soft); margin-bottom:18px; display:inline-block; cursor:pointer; }
+.back-link:hover{ color:var(--bronze-deep); }
+
+.toast{ position:fixed; bottom:24px; right:24px; background:var(--ink); color:var(--ground); padding:12px 20px; font-size:13.5px; border:1px solid var(--line); opacity:0; transform:translateY(8px); transition:opacity 0.2s, transform 0.2s; pointer-events:none; z-index:100; max-width:320px; }
+.toast.show{ opacity:1; transform:translateY(0); }
+
+@media (max-width:760px){
+  .shell{ flex-direction:column; }
+  .sidebar{ width:100%; flex-direction:row; align-items:center; padding:14px 16px; overflow-x:auto; }
+  .sb-brand{ padding:0 16px 0 0; border-bottom:none; border-right:1px solid #38352F; margin-bottom:0; flex-shrink:0; }
+  .sb-nav{ display:flex; }
+  .sb-item{ border-left:none; border-bottom:2px solid transparent; padding:6px 14px; white-space:nowrap; }
+  .sb-item.active{ border-left-color:transparent; border-bottom-color:var(--bronze); }
+  .sb-foot{ display:none; }
+  .main{ padding:24px 18px; }
+  .editor{ padding:20px; }
+  .editor-grid-2{ grid-template-columns:1fr; }
+  .item-row{ flex-direction:column; align-items:flex-start; }
+  .item-actions{ width:100%; }
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
+const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+const PINS = { admin: '2468', editor: '1357' };
+
+const CONFIGURED = !SUPABASE_URL.includes('YOUR_') && !SUPABASE_KEY.includes('YOUR_');
+let sb = null;
+if (CONFIGURED && window.supabase){
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+}
+
+const TYPES = {
+  news:    { table: 'news',     label: 'News & Insights', singular: 'Article', fields: ['title','summary','body','date'] },
+  tenders: { table: 'tenders',  label: 'Tenders',         singular: 'Tender',  fields: ['title','summary','body','closing_date'] },
+  careers: { table: 'careers',  label: 'Careers',         singular: 'Vacancy', fields: ['title','summary','body','location','closing_date'] },
+  projects:{ table: 'projects', label: 'Projects',        singular: 'Project', fields: ['title','summary','body','tag'] },
+};
+const FIELD_LABELS = {
+  title:'Title', summary:'Short summary', body:'Full content', date:'Date',
+  closing_date:'Closing date', location:'Location', tag:'Tag / category'
+};
+
+let state = {
+  screen: CONFIGURED ? 'login' : 'setup',
+  role: null,
+  activeType: 'news',
+  view: 'list',
+  editingId: null,
+  data: { news: [], tenders: [], careers: [], projects: [] },
+  loading: true,
+};
+
+function uid(){ return 'id_' + Date.now() + '_' + Math.random().toString(36).slice(2,8); }
+
+async function loadAll(){
+  state.loading = true;
+  for (const [key, cfg] of Object.entries(TYPES)){
+    try{
+      const { data, error } = await sb.from(cfg.table).select('*').order('updated_at', { ascending:false });
+      if(error) throw error;
+      state.data[key] = data || [];
+    }catch(e){
+      console.error(e);
+      toast('Could not load ' + cfg.label + ' \u2014 check Supabase setup');
+      state.data[key] = [];
+    }
+  }
+  state.loading = false;
+  render();
+}
+
+async function upsertItem(type, item){
+  const cfg = TYPES[type];
+  try{
+    const { error } = await sb.from(cfg.table).upsert(item);
+    if(error) throw error;
+    return true;
+  }catch(e){
+    console.error(e);
+    toast('Save failed: ' + (e.message || 'check Supabase connection'));
+    return false;
+  }
+}
+
+async function deleteItem(type, id){
+  const cfg = TYPES[type];
+  try{
+    const { error } = await sb.from(cfg.table).delete().eq('id', id);
+    if(error) throw error;
+    return true;
+  }catch(e){
+    console.error(e);
+    toast('Delete failed: ' + (e.message || 'check Supabase connection'));
+    return false;
+  }
+}
+
+function toast(msg){
+  let t = document.getElementById('toast');
+  if(!t){
+    t = document.createElement('div');
+    t.id = 'toast'; t.className = 'toast';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=> t.classList.remove('show'), 3200);
+}
+
+function render(){
+  const app = document.getElementById('app');
+  if(state.screen === 'setup'){ app.innerHTML = renderSetup(); return; }
+  if(state.screen === 'login'){ app.innerHTML = renderLogin(); bindLogin(); return; }
+  app.innerHTML = renderShell();
+  bindShell();
+}
+
+function renderSetup(){
+  return `
+    <div class="setup-wrap">
+      <div class="setup-card">
+        <h1>Connect Supabase to finish setup</h1>
+        <p>This content manager needs a Supabase project to store articles, tenders, vacancies and projects so they show up on the live site.</p>
+        <p>1. Create a free project at <code>supabase.com</code>.<br>
+           2. Run the included <code>supabase-setup.sql</code> in its SQL Editor.<br>
+           3. Copy your Project URL and anon public key from Project Settings &rarr; API.<br>
+           4. Paste them into the <code>SUPABASE_URL</code> and <code>SUPABASE_KEY</code> constants near the top of this file.</p>
+        <p>Full step-by-step instructions are in <code>CMS-SETUP.md</code>.</p>
+      </div>
+    </div>
+  `;
+}
+
+function renderLogin(){
+  return `
+    <div class="login-wrap">
+      <div class="login-card">
+        <div class="login-mark">SBPM</div>
+        <h1>Content Manager</h1>
+        <div class="login-sub">Sign in to manage news, tenders, careers and projects.</div>
+        <div class="role-toggle">
+          <button type="button" class="role-btn active" data-role="admin">Admin</button>
+          <button type="button" class="role-btn" data-role="editor">Client / Editor</button>
+        </div>
+        <div class="field">
+          <label for="pinInput">PIN</label>
+          <input id="pinInput" type="password" inputmode="numeric" placeholder="Enter PIN" autocomplete="off">
+        </div>
+        <div class="login-err" id="loginErr" style="display:none;">Incorrect PIN for this role.</div>
+        <button class="btn" id="loginBtn">Sign in</button>
+      </div>
+    </div>
+  `;
+}
+
+function bindLogin(){
+  let selectedRole = 'admin';
+  document.querySelectorAll('.role-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('.role-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      selectedRole = b.dataset.role;
+    });
+  });
+  const doLogin = ()=>{
+    const pin = document.getElementById('pinInput').value.trim();
+    const err = document.getElementById('loginErr');
+    if(PINS[selectedRole] === pin){
+      state.role = selectedRole;
+      state.screen = 'app';
+      err.style.display = 'none';
+      render();
+      loadAll();
+    } else {
+      err.style.display = 'block';
+    }
+  };
+  document.getElementById('loginBtn').addEventListener('click', doLogin);
+  document.getElementById('pinInput').addEventListener('keydown', e=>{ if(e.key === 'Enter') doLogin(); });
+}
+
+function renderShell(){
+  const navItems = Object.entries(TYPES).map(([key, cfg])=>`
+    <div class="sb-item ${state.activeType===key && state.view==='list' ? 'active':''}" data-type="${key}">
+      <span>${cfg.label}</span>
+      <span class="sb-count">${state.loading ? '\u2013' : state.data[key].length}</span>
+    </div>
+  `).join('');
+
+  return `
+    <div class="shell">
+      <div class="sidebar">
+        <div class="sb-brand"><strong>SBPM</strong><span>Content Manager</span></div>
+        <div class="sb-nav">${navItems}</div>
+        <div class="sb-foot">
+          <div class="sb-role">Signed in as <b>${state.role === 'admin' ? 'Admin' : 'Client / Editor'}</b></div>
+          <button class="sb-logout" id="logoutBtn">Sign out</button>
+        </div>
+      </div>
+      <div class="main" id="mainArea">${renderMain()}</div>
+    </div>
+  `;
+}
+
+function renderMain(){
+  if(state.loading) return `<div class="empty">Loading content&hellip;</div>`;
+  if(state.view === 'list') return renderList();
+  return renderEditor();
+}
+
+function renderList(){
+  const cfg = TYPES[state.activeType];
+  const items = state.data[state.activeType].slice();
+
+  const rows = items.length ? items.map(item => `
+    <div class="item-row">
+      <div class="item-main">
+        <div class="item-title">${escapeHtml(item.title || 'Untitled')}</div>
+        <div class="item-meta">
+          <span class="badge ${item.status}">${item.status}</span>
+          ${item.date ? `<span>${escapeHtml(item.date)}</span>` : ''}
+          ${item.closing_date ? `<span>Closes ${escapeHtml(item.closing_date)}</span>` : ''}
+          ${item.updated_by ? `<span>Edited by ${escapeHtml(item.updated_by)}</span>` : ''}
+        </div>
+      </div>
+      <div class="item-actions">
+        <button class="btn outline small" data-edit="${item.id}">Edit</button>
+        ${state.role==='admin' ? `<button class="btn danger small" data-delete="${item.id}">Delete</button>` : ''}
+      </div>
+    </div>
+  `).join('') : `<div class="empty">No ${cfg.label.toLowerCase()} yet. Click "Add new" to create one.</div>`;
+
+  return `
+    <div class="main-head">
+      <div>
+        <h2>${cfg.label}</h2>
+        <p>${state.role === 'admin' ? 'Full access \u2014 create, edit, publish and delete.' : 'You can create and edit drafts. Publishing is handled by an admin.'}</p>
+      </div>
+      <button class="btn" id="addNewBtn" style="width:auto;">Add new ${cfg.singular.toLowerCase()}</button>
+    </div>
+    ${rows}
+  `;
+}
+
+function renderEditor(){
+  const cfg = TYPES[state.activeType];
+  const isNew = state.view === 'new';
+  const item = isNew
+    ? { id: null, status: 'draft' }
+    : state.data[state.activeType].find(i => i.id === state.editingId) || {};
+
+  const fieldsHtml = cfg.fields.map(f => {
+    const label = FIELD_LABELS[f] || f;
+    const val = escapeHtml(item[f] || '');
+    if(f === 'body'){
+      return `<div class="field" style="grid-column:1/-1;"><label>${label}</label><textarea data-field="${f}" rows="7">${val}</textarea></div>`;
+    }
+    if(f === 'summary'){
+      return `<div class="field" style="grid-column:1/-1;"><label>${label}</label><textarea data-field="${f}" rows="2">${val}</textarea></div>`;
+    }
+    if(f === 'date' || f === 'closing_date'){
+      return `<div class="field"><label>${label}</label><input type="date" data-field="${f}" value="${val}"></div>`;
+    }
+    return `<div class="field"><label>${label}</label><input type="text" data-field="${f}" value="${val}"></div>`;
+  }).join('');
+
+  const canPublish = state.role === 'admin';
+  const canDelete = state.role === 'admin' && !isNew;
+
+  return `
+    <span class="back-link" id="backToList">&larr; Back to ${cfg.label}</span>
+    <div class="editor">
+      <h3>${isNew ? 'New ' + cfg.singular.toLowerCase() : 'Edit ' + cfg.singular.toLowerCase()}</h3>
+      <div class="editor-grid-2">${fieldsHtml}</div>
+      <div class="editor-actions">
+        <button class="btn outline" id="saveDraftBtn">Save as draft</button>
+        <button class="btn" id="publishBtn" ${canPublish ? '' : 'disabled title="Only an admin can publish"'}>
+          ${item.status === 'published' ? 'Update published' : 'Publish'}
+        </button>
+        ${canDelete ? `<button class="btn danger" id="deleteBtn" style="margin-left:auto;">Delete</button>` : ''}
+      </div>
+      ${!canPublish ? `<p style="font-size:12.5px; color:var(--ink-soft); margin-top:14px;">Your draft will be reviewed by an admin before it goes live on the site.</p>` : ''}
+    </div>
+  `;
+}
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function bindShell(){
+  document.getElementById('logoutBtn')?.addEventListener('click', ()=>{
+    state.screen = 'login'; state.role = null; state.view = 'list'; state.editingId = null;
+    render();
+  });
+
+  document.querySelectorAll('.sb-item').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      state.activeType = el.dataset.type;
+      state.view = 'list';
+      state.editingId = null;
+      render();
+    });
+  });
+
+  if(state.view === 'list'){
+    document.getElementById('addNewBtn')?.addEventListener('click', ()=>{
+      state.view = 'new'; state.editingId = null; render();
+    });
+    document.querySelectorAll('[data-edit]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        state.view = 'edit'; state.editingId = btn.dataset.edit; render();
+      });
+    });
+    document.querySelectorAll('[data-delete]').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        if(!confirm('Delete this item permanently?')) return;
+        const type = state.activeType;
+        const ok = await deleteItem(type, btn.dataset.delete);
+        if(ok){
+          state.data[type] = state.data[type].filter(i => i.id !== btn.dataset.delete);
+          toast('Deleted');
+        }
+        render();
+      });
+    });
+  }
+
+  if(state.view === 'edit' || state.view === 'new'){
+    document.getElementById('backToList')?.addEventListener('click', ()=>{
+      state.view = 'list'; state.editingId = null; render();
+    });
+
+    const collectFields = ()=>{
+      const out = {};
+      document.querySelectorAll('[data-field]').forEach(el=>{ out[el.dataset.field] = el.value; });
+      return out;
+    };
+
+    const persist = async (status)=>{
+      const type = state.activeType;
+      const fields = collectFields();
+      if(!fields.title || !fields.title.trim()){
+        toast('Title is required');
+        return;
+      }
+      const roleName = state.role === 'admin' ? 'Admin' : 'Client';
+      const now = new Date().toISOString();
+
+      let item;
+      if(state.view === 'new'){
+        item = { id: uid(), ...fields, status, created_at: now, updated_at: now, updated_by: roleName };
+      } else {
+        const existing = state.data[type].find(i => i.id === state.editingId);
+        item = { ...existing, ...fields, status, updated_at: now, updated_by: roleName };
+      }
+
+      const ok = await upsertItem(type, item);
+      if(ok){
+        const idx = state.data[type].findIndex(i => i.id === item.id);
+        if(idx > -1) state.data[type][idx] = item; else state.data[type].unshift(item);
+        toast(status === 'published' ? 'Published' : 'Saved as draft');
+        state.view = 'list'; state.editingId = null;
+        render();
+      }
+    };
+
+    document.getElementById('saveDraftBtn')?.addEventListener('click', ()=> persist('draft'));
+    document.getElementById('publishBtn')?.addEventListener('click', ()=>{
+      if(state.role !== 'admin') return;
+      persist('published');
+    });
+    document.getElementById('deleteBtn')?.addEventListener('click', async ()=>{
+      if(!confirm('Delete this item permanently?')) return;
+      const type = state.activeType;
+      const ok = await deleteItem(type, state.editingId);
+      if(ok){
+        state.data[type] = state.data[type].filter(i => i.id !== state.editingId);
+        toast('Deleted');
+        state.view='list'; state.editingId=null; render();
+      }
+    });
+  }
+}
+
+render();
+</script>
+</body>
+</html>

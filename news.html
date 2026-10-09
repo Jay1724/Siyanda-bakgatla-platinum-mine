@@ -14,6 +14,7 @@
 })();
 </script>
 <link rel="stylesheet" href="assets/css/main.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 
@@ -100,14 +101,16 @@
 
 <section style="border-bottom:none;">
   <div class="wrap">
-    <div class="project-row" style="grid-template-columns:1fr 3fr;">
+    <div id="newsList">
+      <div class="project-row" style="grid-template-columns:1fr 3fr;">
       <div class="ph" style="aspect-ratio:4/3;">[ Article photo ]</div>
       <div>
         <div class="p-name">SBPM exceeds all expectations since acquisition</div>
         <p class="p-tag" style="margin-top:8px;">Siyanda Bakgatla Platinum Mine is exceeding all expectations according to CFO Imraan Osman, who joined the business in 2016 after six years in audit and thirteen years across mining finance and strategy.</p>
       </div>
     </div>
-    <p class="lead-text" style="margin-top:32px; color:var(--ink-soft); font-style:italic;">Further articles from the mine's news archive will be added here.</p>
+    </div>
+    <p class="lead-text" id="newsFallbackNote" style="margin-top:32px; color:var(--ink-soft); font-style:italic;">Further articles from the mine's news archive will be added here.</p>
   </div>
 </section>
 
@@ -156,6 +159,41 @@
     <span>Blackwell Highway, Swartklip, Limpopo, 0370</span>
   </div>
 </footer>
+
+<script>
+const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
+const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+async function loadNews(){
+  const configured = !SUPABASE_URL.includes('YOUR_') && !SUPABASE_KEY.includes('YOUR_');
+  if(!configured || !window.supabase) return; // keep the built-in fallback article showing
+  try{
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const { data, error } = await sb.from('news').select('*').eq('status', 'published').order('date', { ascending:false });
+    if(error) throw error;
+    if(!data || !data.length) return;
+    document.getElementById('newsFallbackNote').style.display = 'none';
+    document.getElementById('newsList').innerHTML = data.map(item => `
+      <div class="project-row" style="grid-template-columns:1fr 3fr;">
+        <div class="ph" style="aspect-ratio:4/3;">[ Article photo ]</div>
+        <div>
+          <div class="p-name">${escapeHtml(item.title)}</div>
+          ${item.date ? `<div class="p-tag" style="margin-top:4px; font-family:var(--mono); font-size:12px;">${escapeHtml(item.date)}</div>` : ''}
+          <p class="p-tag" style="margin-top:8px;">${escapeHtml(item.summary || '')}</p>
+          ${item.body ? `<p class="lead-text" style="margin-top:12px;">${escapeHtml(item.body)}</p>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }catch(e){
+    console.error(e);
+  }
+}
+loadNews();
+</script>
 
 <script src="assets/js/site.js"></script>
 </body>
