@@ -11,9 +11,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@700;800;900&family=Inter:wght@700;800;900&family=Manrope:wght@500;600;700;800&family=Roboto:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
 
 :root{
-  --bg:          #15130F;
-  --bg-soft:     #211D16;
-  --bg-softer:   #2A2419;
+  --bg:          #2A2A2A;
+  --bg-soft:     #343434;
+  --bg-softer:   #3D3D3D;
   --panel:       #FAF9F6;
   --ink:         #EDEAE2;
   --ink-soft:    rgba(237,234,226,0.62);
@@ -21,7 +21,7 @@
   --ink-soft-on-light: #514E47;
   --line:        rgba(237,234,226,0.14);
   --line-on-light:     #C7C0B2;
-  --header-bg:   rgba(21,19,15,0.92);
+  --header-bg:   rgba(42,42,42,0.92);
   --ph-pattern:  rgba(237,234,226,0.05);
   --amber:       #C9971A;
   --amber-deep:  #9C7412;
@@ -333,7 +333,7 @@ html:not([data-theme="light"]) .theme-toggle .icon-moon{ opacity:0; transform:ro
 }
 .hero-scrim{
   position:absolute; inset:0; z-index:1;
-  background:linear-gradient(to top, rgba(10,9,7,0.92) 0%, rgba(10,9,7,0.62) 38%, rgba(10,9,7,0.15) 72%, transparent 100%);
+  background:linear-gradient(to top, rgba(12,12,12,0.92) 0%, rgba(12,12,12,0.62) 38%, rgba(12,12,12,0.15) 72%, transparent 100%);
   pointer-events:none;
 }
 
@@ -360,7 +360,7 @@ html:not([data-theme="light"]) .theme-toggle .icon-moon{ opacity:0; transform:ro
   position:absolute; z-index:2; top:24px; right:32px;
   display:inline-flex; align-items:center; gap:8px;
   padding:9px 16px; border-radius:var(--r-pill);
-  background:rgba(21,19,15,0.55); backdrop-filter:blur(6px);
+  background:rgba(30,30,30,0.55); backdrop-filter:blur(6px);
   border:1px solid rgba(237,234,226,0.22);
   font-size:12.5px; font-weight:500; color:var(--hero-ink);
 }
