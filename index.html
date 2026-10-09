@@ -14,9 +14,29 @@
   }catch(e){}
 })();
 </script>
+<script>
+(function(){
+  // Logo intro: once per session, never under reduced motion (see .intro in main.css / site.js)
+  try{
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(!reduce && !sessionStorage.getItem('sbpm-intro')){
+      document.documentElement.classList.add('intro-on');
+      sessionStorage.setItem('sbpm-intro', '1');
+    }
+  }catch(e){}
+})();
+</script>
 <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
+
+<div class="intro" aria-hidden="true">
+  <div class="intro-stage">
+    <svg class="intro-ring" viewBox="0 0 150 150"><circle cx="75" cy="75" r="72"/></svg>
+    <div class="intro-word" data-text="SIYANDA"><span class="intro-c" style="--n:0"><i>S</i></span><span class="intro-c" style="--n:1"><i>I</i></span><span class="intro-c" style="--n:2"><i>Y</i></span><span class="intro-c" style="--n:3"><i>A</i></span><span class="intro-c" style="--n:4"><i>N</i></span><span class="intro-c" style="--n:5"><i>D</i></span><span class="intro-c" style="--n:6"><i>A</i></span></div>
+    <div class="intro-sub"><span>Bakgatla Platinum Mine</span></div>
+  </div>
+</div>
 
 <header class="site-header">
   <div class="header-bar">
@@ -119,7 +139,7 @@
 <section>
   <div class="wrap">
     <div class="section-mark">OUR VALUES</div>
-    <h2 class="kicker" style="max-width:38ch;">The principles that guide how we create value and build a thriving culture</h2>
+    <h2 class="kicker" data-scroll-fill style="max-width:38ch;">The principles that guide how we create value and build a thriving culture</h2>
   </div>
   <div class="wrap" style="margin-top:36px;">
     <div class="grid-4">
