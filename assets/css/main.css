@@ -757,6 +757,16 @@ html.intro-on .intro.is-exiting{
   white-space:nowrap;
   flex-shrink:0;
 }
+.marquee-price{
+  margin-left:-12px;
+  font-family:var(--mono);
+  font-weight:500;
+  font-size:12px;
+  letter-spacing:.04em;
+  color:var(--amber);
+}
+.marquee-zar{ margin-left:10px; padding-left:10px; border-left:1px solid var(--line); color:var(--ink); }
+.marquee-price small{ margin-left:3px; font-size:10px; letter-spacing:.08em; color:var(--ink-soft); }
 .marquee-dot{ width:4px; height:4px; background:var(--amber); border-radius:50%; flex-shrink:0; }
 
 @keyframes marqueeScroll{

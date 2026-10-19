@@ -37,6 +37,75 @@
     });
   }
 
+  // Live spot prices for the metals strip: USD per troy ounce from a keyless
+  // public feed (gold-api.com), shown with a rand equivalent from a keyless FX
+  // feed (Frankfurter, falling back to open.er-api.com). Items carry
+  // data-symbol; any metal the feed does not price stays a name, a missing FX
+  // rate leaves USD only, and any failure leaves the strip as it was.
+  // Runs before the reduced-motion exit: prices are content, not motion.
+  var priceItems = document.querySelectorAll('.marquee-item[data-symbol]');
+  if(priceItems.length && window.fetch){
+    var symbols = [], seen = {}, usd = {}, zar = 0;
+    priceItems.forEach(function(el){ var s = el.getAttribute('data-symbol'); if(!seen[s]){ seen[s] = 1; symbols.push(s); } });
+    var fmtUsd = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+    var fmtZar = new Intl.NumberFormat('en-ZA', { maximumFractionDigits: 0 });
+    var getJSON = function(url){
+      var ctl = window.AbortController ? new AbortController() : null;
+      var t = setTimeout(function(){ if(ctl) ctl.abort(); }, 6000);
+      return fetch(url, ctl ? { signal: ctl.signal } : undefined)
+        .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+        .then(function(d){ clearTimeout(t); return d; }, function(e){ clearTimeout(t); throw e; });
+    };
+    var paintPrices = function(){
+      symbols.forEach(function(sym){
+        var v = usd[sym];
+        if(!v) return;
+        document.querySelectorAll('.marquee-item[data-symbol="' + sym + '"]').forEach(function(el){
+          var p = el.querySelector('.marquee-price');
+          if(!p){
+            p = document.createElement('b'); p.className = 'marquee-price';
+            el.insertBefore(p, el.querySelector('.marquee-dot'));
+          }
+          p.textContent = '$' + fmtUsd.format(v);
+          if(zar){
+            var z = document.createElement('span');
+            z.className = 'marquee-zar'; z.textContent = 'R' + fmtZar.format(v * zar);
+            p.appendChild(z);
+          }
+          var u = document.createElement('small'); u.textContent = '/oz'; p.appendChild(u);
+          p.title = 'Spot price per troy ounce' + (zar ? ' (rand at ' + zar.toFixed(2) + ' per US dollar)' : '');
+        });
+      });
+      document.querySelectorAll('.marquee-section').forEach(function(sec){ sec.dispatchEvent(new Event('sbpm:prices')); });
+    };
+    var validRate = function(r){ r = Number(r); return isFinite(r) && r > 1 && r < 1000 ? r : 0; };
+    var fetchRate = function(){
+      return getJSON('https://api.frankfurter.dev/v1/latest?base=USD&symbols=ZAR')
+        .then(function(d){ return validRate(d && d.rates && d.rates.ZAR); })
+        .catch(function(){ return 0; })
+        .then(function(r){
+          if(r) return r;
+          return getJSON('https://open.er-api.com/v6/latest/USD')
+            .then(function(d){ return validRate(d && d.rates && d.rates.ZAR); })
+            .catch(function(){ return 0; });
+        });
+    };
+    var refreshPrices = function(){
+      fetchRate().then(function(r){ if(r){ zar = r; paintPrices(); } });
+      symbols.forEach(function(sym){
+        getJSON('https://api.gold-api.com/price/' + sym)
+          .then(function(d){
+            var v = d && Number(d.price);
+            if(!isFinite(v) || v <= 0) return;
+            usd[sym] = v; paintPrices();
+          })
+          .catch(function(){});
+      });
+    };
+    refreshPrices();
+    setInterval(function(){ if(!document.hidden) refreshPrices(); }, 300000);
+  }
+
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(reduceMotion || !('IntersectionObserver' in window)) return;
 
@@ -167,6 +236,7 @@
         }
       }
     }
+    sec.addEventListener('sbpm:prices', fit);
     fit();
     if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
     var resizeTimer;
