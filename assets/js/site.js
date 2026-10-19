@@ -148,6 +148,31 @@
     });
   }
 
+  // Metals marquee: the -50% loop is only seamless if one group is at least as
+  // wide as the viewport, so repeat the items (aria-hidden clones, identical in
+  // both groups so the loop distance stays exact) until it is. Re-fits on resize.
+  document.querySelectorAll('.marquee-section').forEach(function(sec){
+    var groups = sec.querySelectorAll('.marquee-group');
+    if(groups.length !== 2) return;
+    var base = [].slice.call(groups[0].children);
+    function fit(){
+      sec.querySelectorAll('.m-clone').forEach(function(n){ n.remove(); });
+      for(var guard = 0; guard < 8 && groups[0].offsetWidth < sec.clientWidth; guard++){
+        for(var g = 0; g < 2; g++){
+          base.forEach(function(item){
+            var c = item.cloneNode(true);
+            c.classList.add('m-clone'); c.setAttribute('aria-hidden', 'true');
+            groups[g].appendChild(c);
+          });
+        }
+      }
+    }
+    fit();
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    var resizeTimer;
+    window.addEventListener('resize', function(){ clearTimeout(resizeTimer); resizeTimer = setTimeout(fit, 150); });
+  });
+
   // Stat figures (strip and hero badge) count up once, the first time seen.
   // Only short figures count (40+, R60m+, 19+); years like 2018 stay put.
   function countUp(el){
