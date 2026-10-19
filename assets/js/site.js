@@ -37,6 +37,46 @@
     });
   }
 
+  // Live spot prices for the metals strip. Keyless public feed (gold-api.com,
+  // USD per troy ounce). Items carry data-symbol; any metal the feed does not
+  // price simply stays a name. Failures leave the strip exactly as it was.
+  // Runs before the reduced-motion exit: prices are content, not motion.
+  var priceItems = document.querySelectorAll('.marquee-item[data-symbol]');
+  if(priceItems.length && window.fetch){
+    var symbols = [], seen = {};
+    priceItems.forEach(function(el){ var s = el.getAttribute('data-symbol'); if(!seen[s]){ seen[s] = 1; symbols.push(s); } });
+    var fmt = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+    var refreshPrices = function(){
+      symbols.forEach(function(sym){
+        var ctl = window.AbortController ? new AbortController() : null;
+        var t = setTimeout(function(){ if(ctl) ctl.abort(); }, 6000);
+        fetch('https://api.gold-api.com/price/' + sym, ctl ? { signal: ctl.signal } : undefined)
+          .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+          .then(function(d){
+            var v = d && Number(d.price);
+            if(!isFinite(v) || v <= 0) return;
+            var text = '$' + fmt.format(v);
+            document.querySelectorAll('.marquee-item[data-symbol="' + sym + '"]').forEach(function(el){
+              var p = el.querySelector('.marquee-price');
+              if(!p){
+                p = document.createElement('b'); p.className = 'marquee-price';
+                p.title = 'Spot price, USD per troy ounce';
+                el.insertBefore(p, el.querySelector('.marquee-dot'));
+              }
+              p.innerHTML = '';
+              p.appendChild(document.createTextNode(text));
+              var u = document.createElement('small'); u.textContent = '/oz'; p.appendChild(u);
+            });
+            document.querySelectorAll('.marquee-section').forEach(function(sec){ sec.dispatchEvent(new Event('sbpm:prices')); });
+          })
+          .catch(function(){})
+          .then(function(){ clearTimeout(t); });
+      });
+    };
+    refreshPrices();
+    setInterval(function(){ if(!document.hidden) refreshPrices(); }, 300000);
+  }
+
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(reduceMotion || !('IntersectionObserver' in window)) return;
 
@@ -167,6 +207,7 @@
         }
       }
     }
+    sec.addEventListener('sbpm:prices', fit);
     fit();
     if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
     var resizeTimer;
