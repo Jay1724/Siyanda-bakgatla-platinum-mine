@@ -5,46 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Siyanda Bakgatla Platinum Mine | Leading the Future of Sustainable Mining</title>
 <meta name="description" content="Siyanda Bakgatla Platinum Mine (SBPM) extracts and processes Platinum Group Metals, Chromium, base metals and by-products from its reserve base in Limpopo, South Africa.">
-<script>
-(function(){
-  try{
-    var stored = localStorage.getItem('sbpm-theme');
-    var theme = stored || (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-    document.documentElement.setAttribute('data-theme', theme);
-  }catch(e){}
-})();
-</script>
-<script>
-(function(){
-  // Logo intro: once per session, never under reduced motion (see .intro in main.css / site.js)
-  try{
-    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(!reduce && !sessionStorage.getItem('sbpm-intro')){
-      document.documentElement.classList.add('intro-on');
-      sessionStorage.setItem('sbpm-intro', '1');
-    }
-  }catch(e){}
-})();
-</script>
 <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
 
-<div class="intro" aria-hidden="true">
-  <div class="intro-stage">
-    <svg class="intro-ring" viewBox="0 0 150 150"><circle cx="75" cy="75" r="72"/></svg>
-    <div class="intro-word" data-text="SIYANDA"><span class="intro-c" style="--n:0"><i>S</i></span><span class="intro-c" style="--n:1"><i>I</i></span><span class="intro-c" style="--n:2"><i>Y</i></span><span class="intro-c" style="--n:3"><i>A</i></span><span class="intro-c" style="--n:4"><i>N</i></span><span class="intro-c" style="--n:5"><i>D</i></span><span class="intro-c" style="--n:6"><i>A</i></span></div>
-    <div class="intro-sub"><span>Bakgatla Platinum Mine</span></div>
-  </div>
-</div>
 
 <header class="site-header">
   <div class="header-bar">
-    <a href="index.html" class="brand">
-      <span class="brand-mark">SBPM</span>
-      <span>Siyanda Bakgatla<small>Platinum Mine</small></span>
+    <a href="index.html" class="brand" aria-label="Siyanda Bakgatla Platinum Mine, home">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="#FFB400"><circle cx="31" cy="6" r="3.6"/><circle cx="22" cy="10" r="3"/><circle cx="16" cy="18" r="3.4"/><circle cx="18" cy="28" r="3"/><circle cx="26" cy="35" r="3.6"/><circle cx="35" cy="41" r="3"/></g><circle cx="38" cy="18" r="5" fill="none" stroke="#FFB400" stroke-width="1.5"/></svg>
+      <span class="brand-word">SBPM<small>Siyanda Bakgatla Platinum Mine</small></span>
     </a>
-    <nav class="primary">
+    <nav class="primary" id="primaryNav">
       <div class="nav-item current"><a href="index.html">Home</a></div>
       <div class="nav-item">
         <a href="about-us.html">About Us</a>
@@ -69,72 +41,18 @@
       <div class="nav-item"><a href="contact.html">Contact</a></div>
     </nav>
     <div class="header-actions">
-      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme">
-        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-      </button>
       <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav">MENU</button>
     </div>
   </div>
 </header>
-<script>
-  document.getElementById('navToggle').addEventListener('click', function(){
-    var nav = document.querySelector('nav.primary');
-    var open = nav.classList.toggle('open');
-    this.setAttribute('aria-expanded', open);
-    this.textContent = open ? 'CLOSE' : 'MENU';
-  });
-  (function(){
-    var btn = document.getElementById('themeToggle');
-    var mq = window.matchMedia('(prefers-color-scheme: light)');
-    function apply(theme){
-      document.documentElement.setAttribute('data-theme', theme);
-      btn.setAttribute('aria-label', theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
-    }
-    apply(document.documentElement.getAttribute('data-theme') || 'dark');
-    btn.addEventListener('click', function(){
-      var current = document.documentElement.getAttribute('data-theme');
-      var next = current === 'light' ? 'dark' : 'light';
-      try{ localStorage.setItem('sbpm-theme', next); }catch(e){}
-      apply(next);
-    });
-    mq.addEventListener('change', function(e){
-      try{
-        if(!localStorage.getItem('sbpm-theme')){
-          apply(e.matches ? 'light' : 'dark');
-        }
-      }catch(err){}
-    });
-  })();
-</script>
 
-<section class="hero" style="padding-top:0;">
-  <div class="hero-figure">[ Hero photo — shaft headgear / open pit, wide crop, dusk light ]</div>
-  <div class="hero-scrim"></div>
-  <div class="hero-badge">
-    <span class="dot"></span> Swartklip, Limpopo
-  </div>
-  <div class="hero-stat-badge">
-    <div class="val">40+</div>
-    <div class="label">Years in operation</div>
-  </div>
-  <div class="wrap hero-copy">
-    <div class="hero-eyebrow">SIYANDA BAKGATLA PLATINUM MINE — SWARTKLIP, LIMPOPO</div>
-    <h1>Leading the future of sustainable mining</h1>
-    <p class="lede">With over 40 years of experience, Siyanda Bakgatla Platinum Mine (Pty) Ltd — the Union Mine — is a PGM producing mine acquired from Anglo American Platinum in February 2018 by Siyanda Resources and the Bakgatla-Ba-Kgafela Joint Venture.</p>
-    <div style="margin-top:32px; display:flex; gap:14px; flex-wrap:wrap;">
-      <a href="about-us.html" class="btn">About the mine</a>
-      <a href="careers.html" class="btn outline">View careers</a>
-    </div>
-  </div>
+<section class="hero" aria-label="Siyanda Bakgatla Platinum Mine">
+  <div class="hero-slide is-active">[ Hero photo 1 — shaft headgear, dusk light ]</div>
+  <div class="hero-slide">[ Hero photo 2 — underground crew ]</div>
+  <div class="hero-slide">[ Hero photo 3 — open pit ]</div>
+  <button class="hero-arrow prev" type="button" aria-label="Previous slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l-8 8 8 8"/></svg></button>
+  <button class="hero-arrow next" type="button" aria-label="Next slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4l8 8-8 8"/></svg></button>
 </section>
-
-<div class="stat-strip">
-  <div class="stat"><div class="val">40+</div><div class="label">Years of combined operating experience</div></div>
-  <div class="stat"><div class="val">2018</div><div class="label">Acquired from Anglo American Platinum</div></div>
-  <div class="stat"><div class="val">R60m+</div><div class="label">Invested in host communities via SLP</div></div>
-  <div class="stat"><div class="val">19+</div><div class="label">Community projects committed</div></div>
-</div>
 
 <!-- Precious metals strip -->
 <div class="marquee-section" role="group" aria-label="Metals we produce">
@@ -162,55 +80,44 @@
   </div>
 </div>
 
-<section>
-  <div class="wrap">
-    <div class="section-mark">OUR VALUES</div>
-    <h2 class="kicker" data-scroll-fill style="max-width:38ch;">The principles that guide how we create value and build a thriving culture</h2>
+<section class="dark">
+  <div class="wrap center">
+    <h1 class="kicker" style="font-size:36px; font-weight:400;">Exceeding Expectations</h1>
+    <p class="lead-text" style="font-size:12px; color:#fff; max-width:78ch;">Siyanda Bakgatla Platinum Mine (Pty) Ltd (Union Mine) is a PGM Producing Mine located in Swartklip, in the Province of Limpopo, in the Republic of South Africa. The Mine was acquired from Anglo American Platinum effective from the 1st of February 2018 by Siyanda Resources and the Bakgatla Ba Kgafela Joint Venture.</p>
   </div>
-  <div class="wrap" style="margin-top:36px;">
-    <div class="grid-4">
-      <div class="cell">
-        <span class="num">01</span>
-        <h3>Caring</h3>
-        <p>We look after the interests of our colleagues and handle our resources with the necessary care.</p>
-      </div>
-      <div class="cell">
-        <span class="num">02</span>
-        <h3>Respect</h3>
-        <p>We recognise that people are different and we allow them space to thrive.</p>
-      </div>
-      <div class="cell">
-        <span class="num">03</span>
-        <h3>Integrity</h3>
-        <p>We are always honest and hold ourselves to the same moral standards we expect of others.</p>
-      </div>
-      <div class="cell">
-        <span class="num">04</span>
-        <h3>Safety, Health &amp; Environment</h3>
-        <p>We prioritise the health and safety of everyone and take the necessary effort to protect the environment.</p>
-      </div>
+</section>
+
+<section class="dark" style="padding-top:20px;">
+  <div class="wrap center">
+    <h2 class="kicker" style="font-size:30px; font-weight:400;">Our Values</h2>
+    <p class="lead-text" style="font-size:11.5px; color:#fff;">Our values represent our commitment to one another, to the business, to the community and environment.<br>They are the guiding principles which inform how we create value and build a thriving culture.</p>
+    <div class="grid-4 values" style="margin-top:36px; text-align:left;">
+      <div class="cell"><h3>Caring</h3><p>We look after the interests of our colleagues and handle our resources with the necessary care.</p></div>
+      <div class="cell"><h3>Respect</h3><p>We recognise that people are different and we allow them space to thrive.</p></div>
+      <div class="cell"><h3>Integrity</h3><p>We are always honest and hold ourselves to the same moral standards we expect of others.</p></div>
+      <div class="cell"><h3>Safety, Health and Environment</h3><p>We prioritise the health and safety of everyone and take the necessary effort to protect the environment.</p></div>
     </div>
   </div>
 </section>
 
-<section>
-  <div class="wrap split">
-    <div class="ph" style="aspect-ratio:4/3;">[ News photo — SBPM leadership / site visit ]</div>
-    <div>
-      <div class="section-mark">NEWS AND INSIGHTS</div>
-      <h2 class="kicker">SBPM exceeds all expectations since acquisition</h2>
-      <p class="lead-text">Siyanda Bakgatla Platinum Mine is exceeding all expectations according to CFO Imraan Osman, who joined the business in 2016 after six years in audit and thirteen years across mining finance and strategy.</p>
-      <div style="margin-top:24px;">
-        <a href="news.html" class="btn outline">Read more</a>
+<section class="dark">
+  <div class="wrap">
+    <div class="feature">
+      <div class="ph">[ News photo — site visit ]</div>
+      <div class="feature-card">
+        <h3>Siyanda Bakgatla Platinum Exceeds All Expectations Since Acquisition</h3>
+        <p>Siyanda Bakgatla Platinum Mine (SBPM) is exceeding all expectations according to CFO Imraan Osman.</p>
+        <a href="news.html" class="btn">Read more</a>
       </div>
     </div>
+    <div class="center" style="margin-top:36px;"><a href="news.html" class="btn" style="padding:9px 18px; font-size:11px;">News and Insights</a></div>
   </div>
 </section>
 
-<section>
+<section class="dark" style="padding:60px 0;">
   <div class="wrap">
-    <div class="section-mark">ANNUAL REPORT</div>
-    <h2 class="kicker" style="max-width:34ch;">Download our annual report to gain insights into our business</h2>
+    <h2 class="kicker" style="font-size:30px; font-weight:400;">Annual Report</h2>
+    <p style="font-size:12px; color:#fff; margin:0;">Download our annual report to gain insights<br>into our business</p>
     <div class="doc-list">
       <a href="https://www.siyandaplatinum.com/_files/ugd/7e9495_5152cfe3c9334ef3b1d1fcda5aea7389.pdf">FY 20/21</a>
       <a href="https://www.siyandaplatinum.com/_files/ugd/7e9495_96a16fa4a925457dab0ea64fac24893e.pdf">FY 21/22</a>
@@ -220,78 +127,69 @@
   </div>
 </section>
 
-<section class="band">
-  <div class="wrap split rev" style="align-items:center;">
+<section class="dark">
+  <div class="wrap split">
     <div>
-      <div class="section-mark" style="color:#C9B98A;">CAREERS</div>
-      <h2 class="kicker">A career out of the ordinary</h2>
-      <p class="lead-text">SBPM is no ordinary mining company. It's a place where you can make a difference — because what we do matters. We shape the industry, the communities around us and the world, with work that's challenging and relationships that are rewarding.</p>
-      <div style="margin-top:26px;">
-        <a href="careers.html" class="btn outline">Read more</a>
-      </div>
+      <h2 class="kicker" style="font-size:34px; font-weight:400;">A career out of the ordinary</h2>
+      <p class="lead-text" style="font-size:13px; color:#fff;">SBPM is no ordinary mining company. It's never business as usual, deep below the earth, and counting the minutes to home time. It's a place where you can make a difference because what we do at SBPM matters. We shape the industry, the communities around us and the world. You'll find work that is challenging, relationships that are rewarding and constant opportunities to grow. Which means you can expect a career that is extraordinary.</p>
+      <div style="margin-top:26px;"><a href="careers.html" class="btn" style="padding:9px 18px; font-size:11px;">Read more</a></div>
     </div>
     <div class="ph" style="aspect-ratio:4/3;">[ Careers photo — underground crew ]</div>
   </div>
 </section>
 
-<section style="border-bottom:none;">
-  <div class="wrap">
-    <div class="split" style="align-items:center;">
-      <div>
-        <div class="section-mark">NEWSLETTER</div>
-        <h2 class="kicker">Join our mailing list and keep up with our mining news</h2>
-      </div>
-      <form style="display:flex; gap:12px; flex-wrap:wrap;">
-        <div class="field" style="flex:1; min-width:220px; margin-bottom:0;">
-          <input type="email" placeholder="Email address" aria-label="Email address">
-        </div>
-        <button type="submit" class="btn" style="height:46px;">Sign up</button>
+<section class="dark">
+  <div class="wrap split">
+    <div class="offset-img"><div class="ph">[ Newsletter photo — haul truck ]</div></div>
+    <div>
+      <h2 class="kicker" style="font-size:28px; font-weight:400;">Newsletter</h2>
+      <p style="font-size:12px; color:#fff;">Join our mailing list and keep up with our mining news</p>
+      <form onsubmit="return false" style="margin-top:18px; max-width:420px;">
+        <label for="nlEmail" style="display:block; font-size:11px; color:#fff; margin-bottom:6px;">Email *</label>
+        <input id="nlEmail" type="email" style="width:100%; height:38px; background:#fff; border:1px solid var(--gold); padding:0 10px; font:inherit; margin-bottom:8px;">
+        <button type="submit" class="btn" style="width:100%; padding:9px 14px; font-size:11px;">Sign Up</button>
       </form>
     </div>
   </div>
 </section>
 
-<div class="tipoff">
-  <div class="wrap">
-    <div>
-      <strong>Whistleblowing is not a crime, keeping quiet is.</strong>
-      <div style="font-size:13.5px; margin-top:4px; opacity:0.9;">Anyone can call anonymously, 24 hours a day, 365 days a year.</div>
-    </div>
-    <div class="tip-num">0800 333 055</div>
-  </div>
-</div>
-
 <footer class="site-footer">
   <div class="wrap footer-grid">
     <div>
-      <div class="footer-brand">Siyanda Bakgatla</div>
-      <p class="footer-note">A PGM producing mine in Swartklip, Limpopo, extracting and processing Platinum Group Metals, Chromium, base metals and by-products from our reserve base.</p>
+      <a href="index.html" class="brand footer-logo" aria-label="Siyanda Bakgatla Platinum Mine, home">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="#FFB400"><circle cx="31" cy="6" r="3.6"/><circle cx="22" cy="10" r="3"/><circle cx="16" cy="18" r="3.4"/><circle cx="18" cy="28" r="3"/><circle cx="26" cy="35" r="3.6"/><circle cx="35" cy="41" r="3"/></g><circle cx="38" cy="18" r="5" fill="none" stroke="#FFB400" stroke-width="1.5"/></svg>
+        <span class="brand-word">SBPM<small>Siyanda Bakgatla Platinum Mine</small></span>
+      </a>
+      <div class="footer-follow">Follow Us On:
+        <div class="soc">
+          <a href="https://www.linkedin.com/search/results/all/?keywords=siyanda%20bakgatla%20platinum%20mine" aria-label="LinkedIn">in</a>
+          <a href="https://www.facebook.com/profile.php?id=100069433014928" aria-label="Facebook">f</a>
+        </div>
+      </div>
     </div>
-    <div>
-      <h4>Company</h4>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="index.html">Home</a>
       <a href="about-us.html">About Us</a>
-      <a href="leadership.html">Leadership</a>
-      <a href="what-we-do.html">What We Do</a>
       <a href="news.html">News &amp; Insights</a>
-    </div>
-    <div>
-      <h4>Sustainability</h4>
-      <a href="our-community.html">Our Community</a>
-      <a href="projects.html">Projects</a>
-      <a href="safety.html">Safety</a>
-      <a href="social-labour-plan.html">Social Labour Plan</a>
-      <a href="covid-19.html">Covid 19</a>
-    </div>
-    <div>
-      <h4>Connect</h4>
+      <a href="sustainability.html">Sustainability</a>
       <a href="careers.html">Careers</a>
       <a href="tenders.html">Tenders</a>
       <a href="contact.html">Contact Us</a>
-      <a href="https://www.linkedin.com/search/results/all/?keywords=siyanda%20bakgatla%20platinum%20mine">LinkedIn</a>
-      <a href="https://www.facebook.com/profile.php?id=100069433014928">Facebook</a>
+    </nav>
+    <form class="footer-news" onsubmit="return false">
+      <h4>Subscribe to our Newsletter</h4>
+      <label for="fnEmail">Email *</label>
+      <input id="fnEmail" type="email" aria-label="Email address">
+      <button type="submit">Submit</button>
+    </form>
+    <div class="footer-tip">
+      <p>Whistleblowing is not a crime, keeping quiet is!</p>
+      <p>Anyone can call anonymously 24 hours a day, 365 days a year.</p>
+      <p>FreeCall - 0800 333 055<br>FreeFax 0800 00 77 88<br>Email - siyandaplatinum@tip-offs.com<br>FreePost - KZN 138, Umhlanga Rocks, 4320</p>
+      <p>Website - <a href="https://www.tip-offs.com">www.tip-offs.com</a></p>
     </div>
   </div>
-  <div class="wrap footer-bottom">
+  <div class="footer-bottom">
     <span>© Siyanda Bakgatla Platinum Mine (Pty) Ltd</span>
     <span>Blackwell Highway, Swartklip, Limpopo, 0370</span>
   </div>
