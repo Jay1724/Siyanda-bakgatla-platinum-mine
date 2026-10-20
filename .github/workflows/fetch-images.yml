@@ -1,10 +1,16 @@
 name: Fetch site images
 
-# Run from the Actions tab ("Run workflow"). Loads the live site in a browser, saves every image it
+# Run from the Actions tab ("Run workflow"), or automatically when this file or the fetch script
+# changes on main. Loads the live site in a browser, saves every image it
 # finds to assets/img/site/ (plus a manifest.json listing where each came from) and opens a pull
 # request with the result. The images are also attached to the run as a downloadable zip.
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/fetch-images.yml
+      - scripts/fetch-site-images.mjs
   workflow_dispatch:
     inputs:
       site_url:
@@ -61,7 +67,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git commit -m "Add images fetched from ${SITE_URL}"
+          git commit -m "Add images fetched from ${SITE_URL:-https://www.siyandaplatinum.com}"
           git push origin "$branch"
           gh pr create --base "${GITHUB_REF_NAME}" --head "$branch" \
             --title "Add images fetched from the live site" \
